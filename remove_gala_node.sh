@@ -57,12 +57,13 @@ echo "8. Docker 및 GalaNode 관련 서비스 재로드 및 PID 파일 삭제...
 sudo rm -f /var/run/docker.pid
 sudo systemctl daemon-reload
 
-# 9. Docker 및 GalaNode 관련 잔여 패키지 확인
-echo "9. Docker 및 GalaNode 관련 패키지 확인..."
-dpkg -l | grep -i docker
-if [ $? -eq 0 ]; then
-    echo "Docker 관련 패키지가 남아 있습니다. 아래 결과를 참고하여 수동으로 제거하세요."
-    dpkg -l | grep -i docker
+# 9. Docker 및 GalaNode 관련 잔여 패키지 확인 및 자동 제거
+echo "9. Docker 및 GalaNode 관련 패키지 확인 및 자동 제거..."
+if dpkg -l | grep -i docker; then
+    echo "Docker 관련 패키지가 남아 있습니다. 자동으로 제거를 시도합니다..."
+    sudo apt-get purge -y docker.io
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
 else
     echo "Docker 및 GalaNode 관련 패키지가 모두 제거되었습니다."
 fi
